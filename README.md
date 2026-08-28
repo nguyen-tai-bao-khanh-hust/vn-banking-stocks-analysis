@@ -11,3 +11,6 @@ All three stocks show a clear upward trend from 2022 to 2026, with VCB consisten
 
 ## Tools
 Python (pandas, matplotlib) on Google Colab
+
+## Challenges
+Initially, I planned to fetch stock data automatically using the vnstock Python library. However, I ran into two issues: the VCI data source blocks requests from Google Cloud IP addresses (where Colab runs), and other sources in the library returned inconsistent or unsupported errors. After several failed attempts with different data sources, I switched to manually exporting historical price data from a financial data website and uploading it as a file, which proved to be more reliable for this project's scope. This taught me that in real-world data work, the "clean" automated solution isn't always available, and adaptability to a working alternative matters more than sticking to the original plan.
