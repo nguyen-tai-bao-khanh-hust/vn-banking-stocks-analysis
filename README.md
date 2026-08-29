@@ -6,7 +6,7 @@ Historical daily closing prices for VCB, TCB, BID (2022-2026), sourced from Simp
 
 ![Bank stock price chart](bieudo_gia_ngan_hang.png)
 
-![Correlation matrix](ma_trạn_tuong_quan.png)
+![Correlation matrix](ma_tran_tuong_quan.png)
 
 ![Return distribution](phan_phoi_return.png)
 
