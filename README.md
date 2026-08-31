@@ -59,9 +59,11 @@ Initially, I planned to fetch stock data automatically using the vnstock Python 
 
 ### How to Run
 Open `vn_banking_stocks_analysis.ipynb` in Google Colab or Jupyter. 
+
 Required libraries: `pandas`, `numpy`, `matplotlib`, `seaborn`, `openpyxl`.
 
 **Raw price data files**
+
 Place the raw data files inside a `data/` folder in the same directory as the notebook:
 
 ```
