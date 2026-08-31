@@ -1,31 +1,72 @@
-# vn-banking-stocks-analysis
-Analysis of stock price trends for 3 listed Vietnamese banks (VCB, TCB, BID), 2022-2026, using Python.
+### VN Banking Stocks Analysis
+
+Quantitative analysis of return, risk, and correlation for three listed Vietnamese banks — VCB, TCB, and BID — using daily price data from 2022 to 2026.
+
+## Objective
+
+Bank stocks are often assumed to move together given their shared exposure to interest rate and monetary policy cycles. This project tests that assumption quantitatively: how do VCB, TCB, and BID compare in terms of return, volatility, and risk-adjusted performance, and how closely correlated are their price movements?
 
 ## Data
-Historical daily closing prices for VCB, TCB, BID (2022-2026), sourced from Simplize.
 
-![Bank stock price chart](bieudo_gia_ngan_hang.png)
+Historical daily OHLC price data for VCB, TCB, BID (2022–2026), sourced from Simplize. Prices were cleaned, converted to proper datetime format, and pivoted into a single time-indexed table for analysis.
+![Bank stock closing prices, 2022-2026](bieudo_gia_ngan_hang.png)
 
-![Correlation matrix](ma_tran_tuong_quan.png)
+## Methodology
+- Log returns — computed daily log returns for each stock (ln(P_t / P_t-1)), the standard approach in quantitative finance for return aggregation and volatility estimation.
+- Return distribution — plotted the distribution of daily log returns for each stock to inspect shape, spread, and tail behavior.
+  ![Return distribution](phan_phoi_return.png)
+- Volatility — calculated daily and annualized volatility (standard deviation of log returns, annualized with √252).
+- Risk-adjusted return — calculated annualized return and Sharpe ratio for each stock (risk-free rate assumed at 5% annually).
+- Correlation — computed the pairwise correlation matrix of daily log returns across the three stocks.
+- Anomaly detection — flagged trading sessions in 2026 where absolute daily return exceeded 2 standard deviations, to identify unusually volatile sessions.
 
-![Return distribution](phan_phoi_return.png)
+## Key Findings
 
-## Findings 
-- **Returns & risks (2022-2026)**: TCB has the highest average annual return of the 3 codes (~15.18%/year), but also comes with the highest volatility (~32.13%/year). VCB has the lowest profit (~6.90%/year) but is much more stable (volatility ~24.22%/year, the lowest of the 3 codes). BID is average for both indexes (~8.44%/year return, ~30.25%/year volatility). 
-- **Sharpe ratio**: TCB has the best profit/risk ratio (Sharpe ≈ 0.32), outperforming BID (≈0.11) and VCB (≈0.08) — although VCB is the most stable in terms of volatility, the low profit level makes VCB's risk compensation ratio the least attractive during the survey period.
-- **Correlation**: The correlation coefficient between the 3 codes ranges from 0.40 (TCB-VCB) to 0.60 (VCB-BID), at an average to quite high level. This reflects the general systemic risk of the banking industry - holding all three codes at the same time does not help reduce risk as much as expected, because most of the fluctuations come from general macro factors (interest rate policy, industry-wide credit growth) and not just from the specific characteristics of each bank.
-- **Strong fluctuations in early 2026**: All 3 codes recorded many sessions of strong fluctuations (returns exceeding the threshold of 2 standard deviations) focusing on early January and early-mid April 2026. The first period of April coincided with the season of the General Meeting of Shareholders (AGM) of the banking industry - VCB alone increased to the ceiling on April 23, 2026 right before the General Meeting of Shareholders announced a plan to increase charter capital from ~83,557 billion to ~94,000 billion VND through issuing more than 1.06 billion new shares.
-- **TCB had two notable volatile sessions on August 10 and August 26, 2026**, coinciding with the time when banks announced their reviewed financial statements for the first 6 months of 2026 and near the milestone when FTSE Russell officially announced the upgrade of Vietnam's market to emerging market (August 21, 2026) - although TCB is not in the basket of 8 banking codes directly included in the FTSE index, this fluctuation may reflect the effect spread across the entire industry group. This is also consistent with the fact that TCB has the highest volatility among the three codes - more sensitive to market information.
-- **The first period of January 2026** (VCB and BID both increased continuously in many sessions from January 7-15): coincides with the market's general expectation of a new growth cycle for banking stocks in 2026, when cash flow is forecast to return to this group after the period of differentiation at the end of 2025.
+**Risk and return (annualized, 2022–2026):**
 
-## Limitations
-- On July 20, 2026, all 3 codes decreased sharply (-3% to -5%) but the specific cause has not been determined - it may be a general market adjustment, requiring further research.
-- The explanation of the cause of fluctuations is based on time comparison between price data and public news, which is correlation, not statistically tested evidence of cause and effect.
-- Price data is adjusted close, excluding the effect of dividends/stock splits — the odd decimals in the data reflect this characteristic.
-- The risk-free rate used to calculate the Sharpe ratio is a simple assumption (~5%/year), not using the appropriate term government bond interest rate at each time - if you need to be more precise, you can replace it with the actual 1-year government bond interest rate.
-- Correlation analysis is only based on daily returns over the entire period, not testing the stability of correlation across different market periods (rolling correlation) — the correlation coefficient may change during periods of strong market fluctuations compared to stable periods.
+| Stock |	Annualized Return |	Annualized Volatility |	Sharpe Ratio |
+|---|---|---|---|
+| VCB |	6.90% |	24.22% | 0.078|
+| TCB |	15.18% |	32.13%	| 0.317 |
+| BID |	8.44% |	30.25% |	0.114 |
+
+TCB delivered the highest return but also carried the highest volatility; despite that, it posted the best risk-adjusted performance (Sharpe ratio) of the three. VCB was the most stable (lowest volatility) but also the lowest-returning, consistent with its position as the largest and most conservatively priced of the three banks.
+
+**Correlation of daily returns:**
+
+| | VCB | TCB | BID |
+|---|---|---|---|
+| VCB | 1.00 | 0.40 | 0.60 |
+| TCB | 0.40 | 1.00 | 0.52 |
+| BID | 0.60 | 0.52 | 1.00 |
+
+![Correlation heatmap](ma_tran_tuong_quan.png)
+
+All three pairs are positively correlated, confirming that Vietnamese bank stocks tend to move together — likely reflecting shared sensitivity to sector-wide factors such as interest rate policy and credit growth. VCB and BID show the strongest co-movement (0.60), while VCB and TCB are the most loosely linked (0.40), suggesting TCB's price behavior is somewhat more idiosyncratic than the other two.
+
+**Volatility clustering**: anomaly detection flagged multiple sessions of unusually large price moves (>2 standard deviations) across all three stocks in early-to-mid 2026, consistent with the sharp price spike visible in the raw price chart during that period — worth investigating further against macro or sector-specific news from that window.
+
 ## Tools
-Python (pandas, matplotlib) on Google Colab
+Python (pandas, numpy, matplotlib, seaborn) on Google Colab.
 
 ## Challenges
 Initially, I planned to fetch stock data automatically using the vnstock Python library. However, I ran into two issues: the VCI data source blocks requests from Google Cloud IP addresses (where Colab runs), and other sources in the library returned inconsistent or unsupported errors. After several failed attempts with different data sources, I switched to manually exporting historical price data from a financial data website and uploading it as a file, which proved to be more reliable for this project's scope. This taught me that in real-world data work, the "clean" automated solution isn't always available, and adaptability to a working alternative matters more than sticking to the original plan.
+
+## Future Work
+- Time series modeling of volatility (ARIMA/GARCH) to forecast near-term risk
+- Extend comparison to a broader set of listed Vietnamese banks and benchmark against VN-Index
+- Investigate the macro/news drivers behind the early-2026 volatility spike identified in the anomaly detection step
+
+## How to Run
+Open vn_banking_stocks_analysis.ipynb in Google Colab or Jupyter. Required libraries: pandas, numpy, matplotlib, seaborn, openpyxl. Raw price data files Place the raw data files inside a `data/` folder in the same directory as the notebook:
+
+```
+data/VCB_history.csv.xlsx
+data/TCB_history.csv.xlsx
+data/BID_history.csv.xlsx
+```
+The notebook reads them using the `data/` path, e.g.:
+
+```python
+pd.read_excel('data/VCB_history.csv.xlsx', header=5)
+```
