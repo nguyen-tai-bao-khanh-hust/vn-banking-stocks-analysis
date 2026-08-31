@@ -1,17 +1,17 @@
-### VN Banking Stocks Analysis
+## VN Banking Stocks Analysis
 
 Quantitative analysis of return, risk, and correlation for three listed Vietnamese banks — VCB, TCB, and BID — using daily price data from 2022 to 2026.
 
-## Objective
+### Objective
 
 Bank stocks are often assumed to move together given their shared exposure to interest rate and monetary policy cycles. This project tests that assumption quantitatively: how do VCB, TCB, and BID compare in terms of return, volatility, and risk-adjusted performance, and how closely correlated are their price movements?
 
-## Data
+### Data
 
 Historical daily OHLC price data for VCB, TCB, BID (2022–2026), sourced from Simplize. Prices were cleaned, converted to proper datetime format, and pivoted into a single time-indexed table for analysis.
 ![Bank stock closing prices, 2022-2026](bieudo_gia_ngan_hang.png)
 
-## Methodology
+### Methodology
 - Log returns — computed daily log returns for each stock (ln(P_t / P_t-1)), the standard approach in quantitative finance for return aggregation and volatility estimation.
 - Return distribution — plotted the distribution of daily log returns for each stock to inspect shape, spread, and tail behavior.
   ![Return distribution](phan_phoi_return.png)
@@ -20,7 +20,7 @@ Historical daily OHLC price data for VCB, TCB, BID (2022–2026), sourced from S
 - Correlation — computed the pairwise correlation matrix of daily log returns across the three stocks.
 - Anomaly detection — flagged trading sessions in 2026 where absolute daily return exceeded 2 standard deviations, to identify unusually volatile sessions.
 
-## Key Findings
+### Key Findings
 
 **Risk and return (annualized, 2022–2026):**
 
@@ -46,19 +46,23 @@ All three pairs are positively correlated, confirming that Vietnamese bank stock
 
 **Volatility clustering**: anomaly detection flagged multiple sessions of unusually large price moves (>2 standard deviations) across all three stocks in early-to-mid 2026, consistent with the sharp price spike visible in the raw price chart during that period — worth investigating further against macro or sector-specific news from that window.
 
-## Tools
+### Tools
 Python (pandas, numpy, matplotlib, seaborn) on Google Colab.
 
-## Challenges
+### Challenges
 Initially, I planned to fetch stock data automatically using the vnstock Python library. However, I ran into two issues: the VCI data source blocks requests from Google Cloud IP addresses (where Colab runs), and other sources in the library returned inconsistent or unsupported errors. After several failed attempts with different data sources, I switched to manually exporting historical price data from a financial data website and uploading it as a file, which proved to be more reliable for this project's scope. This taught me that in real-world data work, the "clean" automated solution isn't always available, and adaptability to a working alternative matters more than sticking to the original plan.
 
-## Future Work
+### Future Work
 - Time series modeling of volatility (ARIMA/GARCH) to forecast near-term risk
 - Extend comparison to a broader set of listed Vietnamese banks and benchmark against VN-Index
 - Investigate the macro/news drivers behind the early-2026 volatility spike identified in the anomaly detection step
 
-## How to Run
-Open vn_banking_stocks_analysis.ipynb in Google Colab or Jupyter. Required libraries: pandas, numpy, matplotlib, seaborn, openpyxl. Raw price data files Place the raw data files inside a `data/` folder in the same directory as the notebook:
+### How to Run
+Open `vn_banking_stocks_analysis.ipynb` in Google Colab or Jupyter. 
+Required libraries: `pandas`, `numpy`, `matplotlib`, `seaborn`, `openpyxl`.
+
+**Raw price data files**
+Place the raw data files inside a `data/` folder in the same directory as the notebook:
 
 ```
 data/VCB_history.csv.xlsx
